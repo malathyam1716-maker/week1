@@ -1,1 +1,43 @@
+import requests
+import json
+from datetime import datetime
 
+class APIExtractor:
+
+    def __init__(self, api_url, api_key):
+        self.api_url = api_url
+        self.headers = {"Authorization": f"Bearer {api_key}"}
+
+    def extract_data(self):
+        all_data = []
+        next_page = None
+        while True:
+            params = {"cursor": next_page} if next_page else {}
+            response = requests.get(self.api_url,headers=self.headers,params=params)
+            if response.status_code != 200:
+                print("API Error")
+                break
+            data = response.json()
+            all_data.extend(data.get("records", []))
+            next_page = data.get("next_cursor")
+            if not next_page:
+                break    
+        return all_data
+
+    def save_data(self, data):
+        filename = f"data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        with open(filename, "w") as file:
+            json.dump(data, file, indent=4)
+        print(f"Data saved in {filename}")
+
+
+def main():
+    API_URL = "https://dummyjson.com/users"
+    API_KEY = "AIzaSyC0293IQMAFliz90HAp_UKp7M8IVZG-lFs"
+    extractor = APIExtractor(API_URL, API_KEY)
+    data = extractor.extract_data()
+    extractor.save_data(data)
+    print(f"Total Records: {len(data)}")
+
+if __name__ == "__main__":
+    main()
