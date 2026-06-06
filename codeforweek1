@@ -1,43 +1,60 @@
-import requests
-import json
-from datetime import datetime
 
-class APIExtractor:
+from pydantic import BaseModel, EmailStr, ValidationError
+from dotenv import load_dotenv
+import os
 
-    def __init__(self, api_url, api_key):
-        self.api_url = api_url
-        self.headers = {"Authorization": f"Bearer {api_key}"}
+# Load environment variables
+load_dotenv()
 
-    def extract_data(self):
-        all_data = []
-        next_page = None
-        while True:
-            params = {"cursor": next_page} if next_page else {}
-            response = requests.get(self.api_url,headers=self.headers,params=params)
-            if response.status_code != 200:
-                print("API Error")
-                break
-            data = response.json()
-            all_data.extend(data.get("records", []))
-            next_page = data.get("next_cursor")
-            if not next_page:
-                break    
-        return all_data
+API_KEY = os.getenv("API_KEY")
+API_URL = os.getenv("API_URL")
 
-    def save_data(self, data):
-        filename = f"data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        with open(filename, "w") as file:
-            json.dump(data, file, indent=4)
-        print(f"Data saved in {filename}")
+print("API URL:", API_URL)
+print("API Key Loaded Successfully")
+
+# Pydantic Model
+class Customer(BaseModel):
+    id: int
+    firstName: str
+    lastName: str
+    email: EmailStr
 
 
-def main():
-    API_URL = "https://dummyjson.com/users"
-    API_KEY = "AIzaSyC0293IQMAFliz90HAp_UKp7M8IVZG-lFs"
-    extractor = APIExtractor(API_URL, API_KEY)
-    data = extractor.extract_data()
-    extractor.save_data(data)
-    print(f"Total Records: {len(data)}")
+# Sample API Data
+sample_data = [
+    {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com"
+    },
+    {
+        "id": 2,
+        "firstName": "Alice",
+        "lastName": "Smith",
+        "email": "alice@example.com"
+    }
+]
 
-if __name__ == "__main__":
-    main()
+
+def validate_customers(data):
+    valid_customers = []
+
+    for record in data:
+        try:
+            customer = Customer(**record)
+            valid_customers.append(customer)
+
+        except ValidationError as e:
+            print("Validation Error:")
+            print(e)
+
+    return valid_customers
+
+
+customers = validate_customers(sample_data)
+
+print("\nValidated Customers")
+
+for customer in customers:
+    print(customer)
