@@ -1,0 +1,31 @@
+import requests
+
+API_URL = "https://dummyjson.com/users"
+
+def extract_users():
+    limit = 10
+    skip = 0
+    all_users = []
+
+    while True:
+        response = requests.get(
+            API_URL,
+            params={"limit": limit, "skip": skip}
+        )
+
+        data = response.json()
+
+        users = data["users"]
+
+        if not users:
+            break
+
+        all_users.extend(users)
+
+        skip += limit
+
+    return all_users
+
+users = extract_users()
+
+print("Total Users:", len(users))
