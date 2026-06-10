@@ -1,6 +1,5 @@
 import requests
-
-API_URL = "https://dummyjson.com/users"
+from config.settings import settings
 
 def extract_users():
     limit = 10
@@ -9,7 +8,7 @@ def extract_users():
 
     while True:
         response = requests.get(
-            API_URL,
+            settings.dummy_json_url,
             params={"limit": limit, "skip": skip}
         )
 
@@ -19,7 +18,8 @@ def extract_users():
 
         if not users:
             break
-
+        
+        # Perform DB operations here (e.g., insert users into the database)
         all_users.extend(users)
 
         skip += limit
