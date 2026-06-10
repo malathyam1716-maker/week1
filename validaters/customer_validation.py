@@ -1,5 +1,5 @@
 
-from Models.Customer_Model import Customer
+from models.Customer_Model import Customer
 from pydantic import ValidationError
 
 
