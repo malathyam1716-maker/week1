@@ -23,7 +23,7 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config user.name "shiva889"
+          git config user.name "sivasathish889"
           git config user.email "sivasathish889@gmail.com"
 
       - name: Merge main into target branch
