@@ -1,4 +1,4 @@
-from Validaters.customer_validation import validate_customers
+from validaters.customer_validation import validate_customers
 
 # Sample API Data
 sample_data = [
