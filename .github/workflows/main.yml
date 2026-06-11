@@ -1,0 +1,33 @@
+name: Sync Main Branch
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        branch:
+          - abi
+          - sheni
+          - deviBala
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "shiva889"
+          git config user.email "sivasathish889@gmail.com"
+
+      - name: Merge main into target branch
+        run: |
+          git checkout ${{ matrix.branch }}
+          git merge origin/main --no-edit
+          git push origin ${{ matrix.branch }}
