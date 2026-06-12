@@ -1,6 +1,6 @@
-from pydantic.main import BaseModel
+from pydantic import BaseModel,EmailStr
 from datetime import datetime
-from typing import Union,Optional
+from typing import Optional
 
 class Sales_Force_Account(BaseModel):
     Id: int | str
@@ -20,15 +20,18 @@ class Sales_Force_Billing(BaseModel):
     Id: int | str
     FirstName: str
     LastName: str
-    email: str
-    phone: str
-    street: str
-    city: str
-    state: str
-    postal_code: str
-    country: str
-    account_number: int
-    created_date: datetime
-    updated_date: datetime
-    account_id : int
+    Email: Optional[EmailStr | str] = None
+    Phone: Optional[int | str] = None
+    MobilePhone :  Optional[str | int] = None
+    BirthDate : Optional[datetime] = None
+    Languages__c :  Optional[str] = None
+    MailingStreet: Optional[str] = None
+    City:  Optional[str] = None
+    Street : Optional[str] = None
+    State: Optional[str] = None
+    PostalCode: Optional[int] = None
+    Country: Optional[str] = None
+    AccountId : str
+    CreatedDate: datetime
+    LastModifiedDate: datetime
 

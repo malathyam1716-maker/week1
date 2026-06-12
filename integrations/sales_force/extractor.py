@@ -16,7 +16,7 @@ class SalesForce:
             "q": f"{query} LIMIT {limit} OFFSET {offset}"
         }
         try:
-            response = requests.get(f"{self.__base_url}query", headers=headers, params=params)
+            response = requests.get(f"{self.__base_url}query/", headers=headers, params=params)
             if response.status_code == 200:
                 return response.json()
             else:
@@ -30,4 +30,7 @@ class SalesForce:
         return data.get("records", [])
 
     def validate(self, data:list[dict], model_class : Type[BaseModel]) -> list[dict]:
-        return [model_class(**record).model_dump() for record in data]
+        if not data:
+            return []
+        print(data)
+        return [model_class.model_validate(record).model_dump() for record in data]
