@@ -6,5 +6,7 @@ class Settings(BaseSettings):
     salesforce_token: str
     database_url: str
     dummy_json_url:str
+    salesforce_endpoint : str
+    salesforce_access_token : str
 
 settings: Settings = Settings()
