@@ -2,7 +2,7 @@ from pydantic import BaseModel,EmailStr
 from datetime import datetime
 from typing import Optional
 
-class Sales_Force_Account(BaseModel):
+class SalesForceAccount(BaseModel):
     Id: int | str
     Name: str
     Type: Optional[str] = None
@@ -16,10 +16,10 @@ class Sales_Force_Account(BaseModel):
     CreatedDate: datetime
     LastModifiedDate: datetime
 
-class Sales_Force_Billing(BaseModel):
+class SalesForceBilling(BaseModel):
     Id: int | str
-    FirstName: str
-    LastName: str
+    FirstName: Optional[str] = None
+    LastName: Optional[str] = None
     Email: Optional[EmailStr | str] = None
     Phone: Optional[int | str] = None
     MobilePhone :  Optional[str | int] = None
@@ -31,7 +31,7 @@ class Sales_Force_Billing(BaseModel):
     State: Optional[str] = None
     PostalCode: Optional[int] = None
     Country: Optional[str] = None
-    AccountId : str
+    AccountId : Optional[str] = None
     CreatedDate: datetime
     LastModifiedDate: datetime
 

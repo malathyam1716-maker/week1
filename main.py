@@ -1,13 +1,10 @@
-from pipelines.sales_force_pipeline import process_salesForce_account,process_salesForce_billing
+from pipelines.sales_force.account_pipeline import AccountPipeline
+from pipelines.sales_force.billing_pipeline import BillingPipeline
 
 def main():
-    # Data Extraction and Validation for Sales Force Accounts
-    # sales_force_data = process_salesForce_account()
-    # print(sales_force_data)
 
-    # Data Extraction and Validation for Sales Force Billing
-    sales_force_billing_data = process_salesForce_billing()
-    print(sales_force_billing_data)
+    # AccountPipeline().run()
+    BillingPipeline().run()
 
 if __name__ == "__main__":
     main()
