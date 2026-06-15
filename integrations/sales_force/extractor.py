@@ -2,7 +2,8 @@ import requests
 from typing import Type
 from pydantic import BaseModel
 
-class SalesForce:
+class SalesForceExtractor:
+
     def __init__(self, base_url, access_token):
         self.__access_token = access_token
         self.__base_url = base_url
@@ -10,24 +11,37 @@ class SalesForce:
             "Authorization": f"Bearer {self.__access_token}",
             "Content-Type": "application/json"
         }
-    def __extract_data(self, query, limit=2000, offset=0):
+
+    def __salesForce_client(self, query, limit=2000):
+        all_records = []
+        offset = 0
+
         headers = self.__headers
         params = {
             "q": f"{query} LIMIT {limit} OFFSET {offset}"
         }
         try:
-            response = requests.get(f"{self.__base_url}query", headers=headers, params=params)
-            if response.status_code == 200:
-                return response.json()
-            else:
-                raise Exception(f"Failed to extract data: {response.status_code} - {response.text}")
+            while True:
+                response = requests.get(f"{self.__base_url}query/", headers=headers, params=params)
+                response.raise_for_status()
+
+                data = response.json()
+                records = data.get("records", [])
+
+                all_records.extend(records)
+                print(records)
+                if len(records) < limit:
+                    break
+                print(f"Records get : {offset} ")
+                offset += limit
+
+            return all_records
         except requests.exceptions.RequestException as e:
             raise Exception(f"Request failed: {str(e)}")
+        except Exception as e:
+            raise Exception(f"Failed request : {e}")
 
         
-    def extract(self, query:str) -> list[dict]:
-        data = self.__extract_data(query)
-        return data.get("records", [])
-
-    def validate(self, data:list[dict], model_class : Type[BaseModel]) -> list[dict]:
-        return [model_class(**record).model_dump() for record in data]
+    def extract(self, query: str) -> list[dict]:
+        data = self.__salesForce_client(query)
+        return data

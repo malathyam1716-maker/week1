@@ -1,3 +1,3 @@
-from .extractor import SalesForce
-from .model import Sales_Force_Account
-from .queries import ACCOUNT_QUERY
+from .extractor import SalesForceExtractor
+from .models import SalesForceAccount,SalesForceBilling
+from .queries import ACCOUNT_QUERY,BILLING_QUERY

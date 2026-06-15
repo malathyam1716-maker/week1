@@ -1,8 +1,10 @@
-from pipelines.sales_force_pipeline import process_sales_force
+from pipelines.sales_force.account_pipeline import AccountPipeline
+from pipelines.sales_force.billing_pipeline import BillingPipeline
 
 def main():
-    sales_force_data = process_sales_force()
-    print(sales_force_data)
+
+    # AccountPipeline().run()
+    BillingPipeline().run()
 
 if __name__ == "__main__":
     main()
