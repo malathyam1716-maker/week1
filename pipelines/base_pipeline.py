@@ -1,28 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Extractor(ABC):
-    @abstractmethod
-    def extract(self):
-        pass
-
-class Validator(ABC):
-    @abstractmethod
-    def validate(self, data):
-        pass
-
-class Transform(ABC):
-    @abstractmethod
-    def transform(self, data):
-        pass
-
-class Loader(ABC):
-    @abstractmethod
-    def load(self, data):
-        pass
-
-
-class BasePipeline(Extractor,Validator,Transform,Loader):
+class BasePipeline(ABC):
 
     def run(self):
         data = self.extract()
@@ -30,5 +9,18 @@ class BasePipeline(Extractor,Validator,Transform,Loader):
         data = self.transform(data)
         self.load(data)
 
+    @abstractmethod
+    def extract(self):
+        pass
 
+    @abstractmethod
+    def validate(self, data):
+        pass
 
+    @abstractmethod
+    def transform(self, data):
+        pass
+
+    @abstractmethod
+    def load(self, data):
+        pass
