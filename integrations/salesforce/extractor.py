@@ -1,6 +1,4 @@
 import requests
-from typing import Type
-from pydantic import BaseModel
 
 class SalesForceExtractor:
 
