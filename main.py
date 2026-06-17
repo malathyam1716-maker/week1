@@ -1,10 +1,12 @@
-from pipelines.sales_force.account_pipeline import AccountPipeline
-from pipelines.sales_force.billing_pipeline import BillingPipeline
+from pipelines.salesforce.pipelines import SalesForceAccountPipeline, SalesForceBillingPipeline
+from pipelines.stripe.pipelines import StripeAccountPipeline, StripeChargePipeline
+
 
 def main():
-
-    # AccountPipeline().run()
-    BillingPipeline().run()
+    StripeAccountPipeline().run()
+    # StripeChargePipeline().run()
+    # SalesForceAccountPipeline().run()
+    # SalesForceBillingPipeline().run()
 
 if __name__ == "__main__":
     main()
