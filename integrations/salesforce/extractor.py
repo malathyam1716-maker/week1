@@ -11,29 +11,27 @@ class SalesForceExtractor:
         }
 
     def __salesForce_client(self, query, limit=2000):
-        all_records = []
-        offset = 0
-
         headers = self.__headers
         params = {
-            "q": f"{query} LIMIT {limit} OFFSET {offset}"
+            "q": f"{query}  "
         }
+        url = f"{self.__base_url}query/"
         try:
             while True:
-                response = requests.get(f"{self.__base_url}query/", headers=headers, params=params)
+                response = requests.get(url, headers=headers, params=params)
                 response.raise_for_status()
 
                 data = response.json()
                 records = data.get("records", [])
-
-                all_records.extend(records)
                 print(records)
-                if len(records) < limit:
-                    break
-                print(f"Records get : {offset} ")
-                offset += limit
+                # if len(records) < limit:
+                #     break
+                # if data.get("done", True):
+                #      break
+                return records
 
-            return all_records
+
+            # return records
         except requests.exceptions.RequestException as e:
             raise Exception(f"Request failed: {str(e)}")
         except Exception as e:

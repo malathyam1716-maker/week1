@@ -3,9 +3,9 @@ from pipelines.stripe.pipelines import StripeAccountPipeline, StripeChargePipeli
 
 
 def main():
-    StripeAccountPipeline().run()
+    # StripeAccountPipeline().run()
     # StripeChargePipeline().run()
-    # SalesForceAccountPipeline().run()
+    SalesForceAccountPipeline().run()
     # SalesForceBillingPipeline().run()
 
 if __name__ == "__main__":

@@ -8,7 +8,10 @@ class StripeAccountPipeline(BasePipeline):
     model = StripeCustomerModel
 
     def extract(self):
-        return StripeExtractor(settings.stripe_api_key).extract(service_type=ServiceEnum.accounts)
+        return StripeExtractor(settings.stripe_api_key).extract(service_type=ServiceEnum.customers)
+    
+    def load_raw_data(self):
+        pass
 
     def transform(self, data):
         return data
@@ -22,6 +25,9 @@ class StripeChargePipeline(BasePipeline):
 
     def extract(self):
         return StripeExtractor(settings.stripe_api_key).extract(service_type=ServiceEnum.charges)
+    
+    def load_raw_data(self):
+        pass
 
     def transform(self, data):
         return data

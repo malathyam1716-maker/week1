@@ -7,6 +7,7 @@ class BasePipeline(ABC):
 
     def run(self):
         data = self.extract()
+        data = self.load_raw_data(data)
         data = self.validate(data)
         data = self.transform(data)
         self.load(data)
@@ -15,7 +16,11 @@ class BasePipeline(ABC):
         return validator(data, self.model)
 
     @abstractmethod
-    def extract(self):
+    def extract(self,data):
+        pass
+
+    @abstractmethod
+    def load_raw_data(self):
         pass
 
     @abstractmethod
