@@ -9,5 +9,8 @@ class Settings(BaseSettings):
     salesforce_access_token : str
     zendesk_endpoint : str
     zendesk_access_token : str
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
+    aws_s3_bucket_name: str = ""
 
 settings: Settings = Settings()
