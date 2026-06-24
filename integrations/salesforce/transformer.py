@@ -1,15 +1,17 @@
 import polars as pl
 from models.unified import UnifiedCustomer
+from utils.enums import SalesForceServiceEnum
+
 
 class SalesForceTransformer:
-    def __init__(self, record_type: str):
+    def __init__(self, record_type: SalesForceServiceEnum):
         self.record_type = record_type
 
     def transform(self, data: list[dict]) -> list[UnifiedCustomer]:
-        if self.record_type == "account":
+        if self.record_type == SalesForceServiceEnum.accounts:
             return self.__transform_accounts(data)
-        elif self.record_type == "billing":
-            return self.__transform_billing(data)
+        elif self.record_type == SalesForceServiceEnum.contacts:
+            return self.__transform_contact(data)
         return []
 
     def __transform_accounts(self, data: list[dict]) -> list[UnifiedCustomer]:
@@ -38,7 +40,7 @@ class SalesForceTransformer:
         unified_dicts = df_unified.to_dicts()
         return [UnifiedCustomer(**d) for d in unified_dicts]
 
-    def __transform_billing(self, data: list[dict]) -> list[UnifiedCustomer]:
+    def __transform_contact(self, data: list[dict]) -> list[UnifiedCustomer]:
         if not data:
             return []
             

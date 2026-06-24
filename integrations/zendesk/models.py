@@ -39,7 +39,7 @@ class CoreZendeskTicketModel(BaseModel):
     ticket_id: int = Field(alias="id")
     url: Optional[str] = None
     description : Optional[str] = None
-    title = Optional[str] = None
+    title: Optional[str] = None
     requester_id: int  
     assignee_id: Optional[int] = None  
     

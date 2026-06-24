@@ -1,14 +1,16 @@
 import polars as pl
 from models.unified import UnifiedCustomer, UnifiedTransaction
+from utils.enums import StripeServiceEnum
+
 
 class StripeTransformer:
-    def __init__(self, record_type: str):
+    def __init__(self, record_type: StripeServiceEnum):
         self.record_type = record_type
 
     def transform(self, data: list[dict]):
-        if self.record_type == "customer":
+        if self.record_type == StripeServiceEnum.customers:
             return self.__transform_customers(data)
-        elif self.record_type == "charge":
+        elif self.record_type == StripeServiceEnum.charges:
             return self.__transform_charges(data)
         return []
 

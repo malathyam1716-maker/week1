@@ -15,7 +15,7 @@ class SalesForceAccount(BaseModel):
     CreatedDate: datetime
     LastModifiedDate: datetime
 
-class SalesForceBilling(BaseModel):
+class SalesForceContact(BaseModel):
     Id: int | str
     FirstName: Optional[str] = None
     LastName: Optional[str] = None
