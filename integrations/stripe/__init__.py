@@ -1,2 +1,2 @@
-from .extractor import StripeExtractor, ServiceEnum
+from .extractor import StripeExtractor
 from .models import StripeCustomerModel, StripeChargeModel
