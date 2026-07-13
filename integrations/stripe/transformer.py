@@ -4,13 +4,25 @@ from utils.enums import StripeServiceEnum
 
 
 class StripeTransformer:
-    def __init__(self, record_type: StripeServiceEnum):
-        self.record_type = record_type
+    def __init__(self, record_type: StripeServiceEnum | str):
+        self.record_type = self._normalize_record_type(record_type)
+
+    @staticmethod
+    def _normalize_record_type(record_type: StripeServiceEnum | str) -> StripeServiceEnum:
+        if isinstance(record_type, StripeServiceEnum):
+            return record_type
+
+        normalized_value = (record_type or "").strip().lower()
+        if normalized_value in {"customer", "customers"}:
+            return StripeServiceEnum.customers
+        if normalized_value in {"charge", "charges"}:
+            return StripeServiceEnum.charges
+        return StripeServiceEnum.customers
 
     def transform(self, data: list[dict]):
         if self.record_type == StripeServiceEnum.customers:
             return self.__transform_customers(data)
-        elif self.record_type == StripeServiceEnum.charges:
+        if self.record_type == StripeServiceEnum.charges:
             return self.__transform_charges(data)
         return []
 

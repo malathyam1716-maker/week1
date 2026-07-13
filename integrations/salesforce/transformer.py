@@ -4,13 +4,25 @@ from utils.enums import SalesForceServiceEnum
 
 
 class SalesForceTransformer:
-    def __init__(self, record_type: SalesForceServiceEnum):
-        self.record_type = record_type
+    def __init__(self, record_type: SalesForceServiceEnum | str):
+        self.record_type = self._normalize_record_type(record_type)
+
+    @staticmethod
+    def _normalize_record_type(record_type: SalesForceServiceEnum | str) -> SalesForceServiceEnum:
+        if isinstance(record_type, SalesForceServiceEnum):
+            return record_type
+
+        normalized_value = (record_type or "").strip().lower()
+        if normalized_value in {"account", "accounts"}:
+            return SalesForceServiceEnum.accounts
+        if normalized_value in {"contact", "contacts"}:
+            return SalesForceServiceEnum.contacts
+        return SalesForceServiceEnum.accounts
 
     def transform(self, data: list[dict]) -> list[UnifiedCustomer]:
         if self.record_type == SalesForceServiceEnum.accounts:
             return self.__transform_accounts(data)
-        elif self.record_type == SalesForceServiceEnum.contacts:
+        if self.record_type == SalesForceServiceEnum.contacts:
             return self.__transform_contact(data)
         return []
 
