@@ -26,18 +26,37 @@ class StripeExtractor:
         wait=wait_exponential(multiplier=1, min=2, max=10),
         stop=stop_after_attempt(5),
     )
-    def __client(self, service_type: StripeServiceEnum) -> list[dict]:
+    def __fetch_page(self, service, params: dict):
+        return service.list(**params)
+
+    def extract(self) -> list[dict]:
         client = StripeClient(self.api_key)
-        service_name = service_type.value
+        service_name = self.service_type.value
         service = getattr(client.v1, service_name, None)
         if service is None:
             raise AttributeError(f"Unsupported Stripe service: {service_name}")
 
-        data = service.list().data
-        return data
+        all_records = []
+        starting_after = None
+        limit = 100
 
-    def extract(self) -> list[dict]:
-        raw_data = self.__client(self.service_type)
-        customer_list = [c.to_dict() for c in raw_data]
+        while True:
+            params = {"limit": limit}
+            if starting_after:
+                params["starting_after"] = starting_after
+
+            page = self.__fetch_page(service, params)
+            data = page.data
+            if not data:
+                break
+
+            all_records.extend(data)
+
+            if not page.has_more:
+                break
+
+            starting_after = data[-1].id
+
+        customer_list = [c.to_dict() for c in all_records]
         return customer_list
 

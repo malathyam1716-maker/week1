@@ -80,3 +80,28 @@ def test_stripe_charge_transform():
     assert result[0].status == "succeeded"
     assert result[0].currency == "usd"
 
+def test_zendesk_user_transform():
+    from integrations.zendesk.transformer import ZenDeskTransformer
+    raw_data = [
+        {
+            "id": "zd_user_1",
+            "name": "Alex Smith",
+            "email": "alex@zendesk.com",
+            "phone": "987654321",
+            "role": "agent",
+            "active": True,
+            "created_at": datetime.datetime(2023, 3, 1),
+            "updated_at": datetime.datetime(2023, 3, 2)
+        }
+    ]
+    transformer = ZenDeskTransformer()
+    result = transformer.transform(raw_data)
+    
+    assert len(result) == 1
+    assert isinstance(result[0], UnifiedCustomer)
+    assert result[0].id == "zd_user_1"
+    assert result[0].source_system == "zendesk"
+    assert result[0].name == "Alex Smith"
+    assert result[0].email == "alex@zendesk.com"
+
+

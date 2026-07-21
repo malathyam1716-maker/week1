@@ -59,7 +59,7 @@ def get_zendesk_user_pipeline(raw_loader, final_loader):
     return BasePipeline(
         name="ZenDeskUserPipeline",
         model=ZenDeskUsers,
-        extractor=ZenDeskExtractor().extract("users"),
+        extractor=ZenDeskExtractor(service_type="users"),
         transformer=ZenDeskTransformer(),
         raw_loader=raw_loader,
         final_loader=final_loader

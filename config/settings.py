@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     aws_access_key_id: str = ""
     aws_secret_access_key: str = ""
     aws_s3_bucket_name: str = ""
+    slack_webhook_url: str = ""
+    alert_email: str = ""
 
 
 settings: Settings = Settings()
